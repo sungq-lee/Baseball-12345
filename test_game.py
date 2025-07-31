@@ -16,11 +16,7 @@ def assert_illegal_argument(game, guessNumber):
         pass
 
 
-def test_exception_when_input_is_none(game):
+def test_exception_when_invalid_input(game):
     assert_illegal_argument(game, None)
-
-
-def test_exception_when_length_is_unmatched(game):
     assert_illegal_argument(game, "12")
-
-
+    assert_illegal_argument(game, "1234")
