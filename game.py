@@ -15,9 +15,24 @@ class Game:
 
     def guess(self, guess_number) -> GameResult | None:
         self.assert_illegal_value(guess_number)
+
         if guess_number == self._question:
             return GameResult(True, 3, 0)
+
+        if self.is_2strikes_0ball(guess_number):
+           return GameResult(False, 2, 0)
+
         return GameResult(False, 0, 0)
+
+    def is_2strikes_0ball(self, guess_number):
+        return (
+                (guess_number[0] == self._question[0] and guess_number[1] == self._question[1] and guess_number[2] !=
+                 self._question[2])
+                or (guess_number[0] == self._question[0] and guess_number[2] == self._question[2] and guess_number[1] !=
+                    self._question[1])
+                or (guess_number[1] == self._question[1] and guess_number[2] == self._question[2] and guess_number[0] !=
+                    self._question[0])
+        )
 
     def assert_illegal_value(self, guess_number):
         if guess_number is None:
