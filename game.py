@@ -1,2 +1,64 @@
+from game_result import GameResult
+
+
 class Game:
-    pass
+    def __init__(self):
+        self._question = ""
+
+    @property
+    def question(self):
+        return self._question
+
+    @question.setter
+    def question(self, value):
+        self._question = value
+
+    def guess(self, guess_number) -> GameResult | None:
+        self.assert_illegal_value(guess_number)
+
+        if guess_number == self._question:
+            return GameResult(True, 3, 0)
+
+        if self.is_2strikes_0ball(guess_number):
+            return GameResult(False, 2, 0)
+
+        if self.is_1strikes_2ball(guess_number):
+            return GameResult(False, 1, 2)
+
+        return GameResult(False, 0, 0)
+
+    def is_1strikes_2ball(self, guess_number):
+        return ((guess_number[0] == self._question[0] and guess_number[1] == self._question[2] and guess_number[2] ==
+                 self._question[1])
+                or (guess_number[1] == self._question[1] and guess_number[0] == self._question[2] and guess_number[2] ==
+                    self._question[0])
+                or (guess_number[2] == self._question[2] and guess_number[0] == self._question[1] and guess_number[1] ==
+                    self._question[0]))
+
+    def is_2strikes_0ball(self, guess_number):
+        return (
+                (guess_number[0] == self._question[0] and guess_number[1] == self._question[1] and guess_number[2] !=
+                 self._question[2])
+                or (guess_number[0] == self._question[0] and guess_number[2] == self._question[2] and guess_number[1] !=
+                    self._question[1])
+                or (guess_number[1] == self._question[1] and guess_number[2] == self._question[2] and guess_number[0] !=
+                    self._question[0])
+        )
+
+    def assert_illegal_value(self, guess_number):
+        if guess_number is None:
+            raise TypeError("입력이 None 입니다.")
+
+        if len(guess_number) != 3:
+            raise TypeError("입력은 3 자리 문자열 이어야 합니다.")
+
+        if not guess_number.isdigit():
+            raise TypeError("모든 문자는 숫자로 구성되어야 합니다.")
+
+        if self.is_duplicated_number(guess_number):
+            raise TypeError("중복된 숫자가 존재 합니다.")
+
+    def is_duplicated_number(self, guess_number):
+        return (guess_number[0] == guess_number[1] or
+                guess_number[0] == guess_number[2] or
+                guess_number[1] == guess_number[2])
