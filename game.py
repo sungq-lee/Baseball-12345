@@ -9,9 +9,8 @@ class Game:
         if len(guess_number) != 3:
             raise TypeError("입력은 3 자리 문자열 이어야 합니다.")
 
-        for number in guess_number:
-            if not ord('0') <= ord(number) <= ord('9'):
-                raise TypeError("모든 문자는 숫자로 구성되어야 합니다.")
+        if not guess_number.isdigit():
+            raise TypeError("모든 문자는 숫자로 구성되어야 합니다.")
 
         if self.is_duplicated_number(guess_number):
             raise TypeError("중복된 숫자가 존재 합니다.")
