@@ -36,6 +36,10 @@ def test_return_solved_result_if_unmatched_number(game):
     strikes = 0
     balls = 0
 
+    assert_matched_number(balls, result, strikes)
+
+
+def assert_matched_number(balls, result, strikes):
     assert result is not None
     assert result.solved is False
     assert result.strikes == strikes
