@@ -16,34 +16,27 @@ class Game:
     def guess(self, guess_number) -> GameResult | None:
         self.assert_illegal_value(guess_number)
 
-        if guess_number == self._question:
-            return GameResult(True, 3, 0)
+        solved = guess_number == self._question
+        strikes = self.count_strikes(guess_number)
+        balls = self.count_balls(guess_number)
 
-        if self.is_2strikes_0ball(guess_number):
-            return GameResult(False, 2, 0)
+        return GameResult(solved=solved, strikes=strikes, balls=balls)
 
-        if self.is_1strikes_2ball(guess_number):
-            return GameResult(False, 1, 2)
+    def count_strikes(self, guess_number):
+        strikes = 0
+        for i in range(3):
+            if guess_number[i] == self.question[i]:
+                strikes += 1
+        return strikes
 
-        return GameResult(False, 0, 0)
-
-    def is_1strikes_2ball(self, guess_number):
-        return ((guess_number[0] == self._question[0] and guess_number[1] == self._question[2] and guess_number[2] ==
-                 self._question[1])
-                or (guess_number[1] == self._question[1] and guess_number[0] == self._question[2] and guess_number[2] ==
-                    self._question[0])
-                or (guess_number[2] == self._question[2] and guess_number[0] == self._question[1] and guess_number[1] ==
-                    self._question[0]))
-
-    def is_2strikes_0ball(self, guess_number):
-        return (
-                (guess_number[0] == self._question[0] and guess_number[1] == self._question[1] and guess_number[2] !=
-                 self._question[2])
-                or (guess_number[0] == self._question[0] and guess_number[2] == self._question[2] and guess_number[1] !=
-                    self._question[1])
-                or (guess_number[1] == self._question[1] and guess_number[2] == self._question[2] and guess_number[0] !=
-                    self._question[0])
-        )
+    def count_balls(self, guess_number):
+        balls = 0
+        for i in range(3):
+            for j in range(3):
+                if i != j:
+                    if guess_number[i] == self._question[j]:
+                        balls += 1
+        return balls
 
     def assert_illegal_value(self, guess_number):
         if guess_number is None:
